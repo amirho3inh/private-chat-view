@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title id="titlePage">private chat - login</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="assets/fontawesome-free-5.14.0-web/css/all.min.css">
+    <script src="assets/fontawesome-free-5.14.0-web/js/all.min.js"></script>
+
+    <link href="assets/css/login.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id='stars'></div>
+<div id='stars2'></div>
+<div id='stars3'></div>
+<div id='horizon'>
+    <div class='glow'></div>
+</div>
+<div id='earth'></div>
+
+<style>
+    .f-btn-add-new-room{
+        padding: 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #777;
+        text-align: center;
+        border: 1px solid #bbb;
+        background: #f0f0f0;
+    }
+    .f-btn-add-new-room:hover{
+        background: #e0e0e0;
+    }
+    #headerLoginBox{
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        /*border-bottom: 1px solid #bbbbbb;*/
+    }
+    .color-black{
+        color: #000;
+    }
+    .tools-btn{
+        cursor: pointer;
+        background: #f0f0f0;
+        text-align: center;
+        border-radius: 50%;
+        color: #777;
+        padding: 8px;
+        width: 33px;
+        height: 33px;
+    }
+    .tools-btn:hover{
+        background: #e0e0e0;
+        color: #666;
+    }
+    #toolsBtn{
+        text-align: right;
+    }
+</style>
+
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <form class="col-md-6 col-sm-12">
+
+            <div class="card" id="login">
+                <div class="card-body text-center">
+                    <div class="form-group">
+                        <label style="color: #000;" for="mobileInput">mobile</label>
+                        <input type="text" class="form-control" id="mobileInput" placeholder="09*********">
+                    </div>
+                    <a class="btn btn-primary" href="javascript:login()" role="button">login or register</a>
+                </div>
+            </div>
+
+            <div class="card" id="listRoomsBox" style="display: none;">
+                <div class="card-body">
+                    <div id="headerLoginBox">
+                        <div class="row">
+                            <div class="col-md-6 color-black" id="welcome"></div>
+                            <div class="col-md-6" id="toolsBtn">
+                                <a href="javascript:showmModalMessages()" class="tools-btn" data-toggle="tooltip" title="messages" data-placement="bottom"><i class="far fa-envelope"></i></a>
+                                <a href="javascript:showmModalAddRoom()" class="tools-btn" data-toggle="tooltip" title="add new room" data-placement="bottom"><i class="fas fa-plus"></i></a>
+                                <a href="javascript:logout()" class="tools-btn" data-toggle="tooltip" title="logout" data-placement="bottom"><i class="fas fa-sign-out-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="listRoomsMessage"></div>
+                    <table class="table" id="listRooms">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">title</th>
+                            <th scope="col">type</th>
+                            <th scope="col">max client</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Add Room -->
+<div class="modal fade" id="modalAddRoom" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalAddRoom" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-black" id="staticBackdropLabel">Add Room</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="list-group list-group-horizontal-md" id="list-tab" role="tablist" style="margin-bottom: 15px;">
+                            <a class="list-group-item list-group-item-action text-center active" id="list-tabaddnewroom" data-toggle="list" href="#tabaddnewroom" role="tab" aria-controls="addnewroom">add new room</a>
+                            <!--<a class="list-group-item list-group-item-action text-center" id="list-tabaddnewroomshare" data-toggle="list" href="#tabaddnewroomshare" role="tab" aria-controls="addnewroomshare">form share</a>-->
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="tabaddnewroom" role="tabpanel" aria-labelledby="list-tabaddnewroom">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="newRoomTitle" class="color-black">title</label>
+                                            <input type="text" class="form-control" id="newRoomTitle">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="newRoomType" class="color-black">type</label>
+                                            <select class="form-control" id="newRoomType">
+                                                <option value="public">public</option>
+                                                <option value="private">private</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="newRoomMaxClient" class="color-black">max client <span class="badge badge-pill badge-primary" id="showNewRoomMaxClient">Unlimited</span></label>
+                                            <input type="range" class="custom-range" min="0" max="50" id="newRoomMaxClient" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="tabaddnewroomshare" role="tabpanel" aria-labelledby="list-tabaddnewroomshare">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="newRoomShareCode" class="color-black">share code</label>
+                                            <input type="text" class="form-control" id="newRoomShareCode">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" href="javascript:addRoom()" role="button"><i class="fas fa-plus"></i> add</a>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Messages -->
+<div class="modal fade" id="modalMessages" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalMessages" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-black">Messages</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="messagesList"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Share Room -->
+<div class="modal fade" id="modalShareRoom" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modalShareRoom" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-black">Share Room</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="shareRoomToMobile" class="color-black">mobile number</label>
+                    <input type="text" class="form-control" id="shareRoomToMobile" placeholder="09*********">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" href="javascript:shareRoom()" role="button"><i class="fas fa-share-alt"></i> share</a>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+    //let url = 'http://localhost:3000';
+    let url = 'http://io.private-chat.ir';
+    let token = '';
+    function login() {
+        $('#listRoomsMessage').html('');
+        let mobile = $('#mobileInput').val();
+        if(mobile==''){
+            if(localStorage.getItem("mobile") != null){
+                mobile = localStorage.getItem("mobile");
+            }
+        }
+        var data = JSON.stringify({"mobile":`${mobile}`});
+
+        var settings = {
+            "url": url+"/login",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": data,
+            // dataType: 'jsonp',
+        };
+
+        $.ajax(settings).done(function (response) {
+            // var data = JSON.parse(response);
+            var data = response;
+            if(data.message==''){
+                $('#login').hide();
+                $('#listRoomsBox').show();
+                token = data.data.token;
+                localStorage.setItem("token", `${token}`);
+                localStorage.setItem("mobile", `${data.data.user.mobile}`);
+                $('#mobileInput').val('');
+                $('#welcome').html(`welcome ${data.data.user.mobile}`);
+                if(data.data.rooms.length == 0){
+                    $('#listRooms').hide();
+                    $('#listRoomsMessage').html(`<div class="f-btn-add-new-room" onclick="showmModalAddRoom()"><i style="font-size:27px;color:#999;" class="fas fa-plus"></i> <br> add new room</div>`);
+                    return;
+                }else {
+
+                }
+
+                let number = 1;
+                let max_client = '';
+                let html = '';
+                let share = '';
+                let deleted = '';
+                $.each(data.data.rooms, function (key, value) {
+                    html += '<tr>';
+                    html += `<th scope="row">${number}</th>`;
+                    html += `<td>${value.title}</td>`;
+                    html += `<td>${value.type}</td>`;
+                    share = `<a class="btn btn-primary" href='javascript:showmModalShareRoom("${btoa(value.id)}")' role="button"><i class="fas fa-share-alt"></i></a>`;
+                    if(value.max_client == 0){
+                        max_client = 'unlimited';
+                    }else{
+                        max_client = value.max_client;
+                        if(value.user_now >= max_client){
+                            share = '';
+                        }
+                    }
+                    if(value.admin.toString() == getUser().userId){
+                        deleted = `<a class="btn btn-danger" href='javascript:removeRoom(${value.id})' role="button"><i class="fas fa-trash"></i></a>`;
+                    }
+                    html += `<td>${value.user_now} / ${max_client}</td>`;
+                    html += `<td>
+                                <a class="btn btn-primary" href='room.html?token=${token}?r=${btoa(value.id)}' role="button"><i class="fas fa-sign-in-alt"></i></a>
+                                ${share}
+                                ${deleted}
+                            </td>`;
+                    html += '</tr>';
+                    number++;
+                })
+                $('#titlePage').html('dashboard');
+                $('#listRooms tbody').html(html);
+            }else {
+                switch (data.message) {
+                    case 'notInserted':
+                        alert('notInserted');
+                        break;
+                    case 'inserted':
+                        alert('inserted. try again');
+                        break;
+                    case 'noData':
+                        alert('noData');
+                        break;
+                }
+            }
+        }).fail(function() {
+            alert( "server is down" );
+        });
+    }
+
+    $(function () {
+        $('#mobileInput').keypress(function (e) {
+            var key = e.which;
+            if(key == 13) {
+                login();
+                return false;
+            }
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+        loginBefore();
+    })
+
+    function loginBefore() {
+        if(localStorage.getItem("token") == null){
+            localStorage.removeItem("token");
+            localStorage.removeItem("mobile");
+            $('#login').show();
+            $('#listRoomsBox').hide();
+        }else{
+            login();
+        }
+    }
+
+    function logout() {
+        $('#login').show();
+        $('#listRoomsBox').hide();
+        localStorage.removeItem("token");
+        localStorage.removeItem("mobile");
+        $('#titlePage').html('login');
+    }
+
+    function showmModalAddRoom() {
+        $('#newRoomTitle').val('');
+        $('#newRoomMaxClient').val(0);
+        $('#newRoomType').val('public');
+        $('#modalAddRoom').modal('show');
+        $('#newRoomMaxClient').on('change', function () {
+            if($('#newRoomMaxClient').val()==0){
+                $('#showNewRoomMaxClient').html('Unlimited');
+            }else{
+                $('#showNewRoomMaxClient').html($('#newRoomMaxClient').val());
+            }
+        })
+    }
+
+    function addRoom() {
+        let title = $('#newRoomTitle').val();
+        let maxClient = $('#newRoomMaxClient').val();
+        let type = $('#newRoomType').val();
+        let data = {"name":title,"max_client":maxClient,"type":type};
+
+        let settings = {
+            "url": url+"/addRoom",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "token": localStorage.getItem("token"),
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify(data),
+        };
+
+        $.ajax(settings).done(function (response) {
+            if(response.error === true){
+                getListRooms();
+                $('#modalAddRoom').modal('hide');
+            }else {
+                alert(response.message);
+            }
+        });
+    }
+
+    function getListRooms() {
+        var settings = {
+            "url": url+"/roomsList",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "token": localStorage.getItem("token")
+            },
+        };
+
+        $.ajax(settings).done(function (response) {
+            if(response.error === true){
+                let number = 1;
+                let max_client = '';
+                let share = '';
+                let html = `<thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">title</th>
+                            <th scope="col">type</th>
+                            <th scope="col">max client</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>`;
+                $.each(response.data, function (key, value) {
+                    html += '<tr>';
+                    html += `<th scope="row">${number}</th>`;
+                    html += `<td>${value.title}</td>`;
+                    html += `<td>${value.type}</td>`;
+                    share = `<a class="btn btn-primary" href='javascript:showmModalShareRoom("${btoa(value.id)}")' role="button"><i class="fas fa-share-alt"></i></a>`;
+                    if(value.max_client == 0){
+                        max_client = 'unlimited';
+                    }else{
+                        max_client = value.max_client;
+                        if(value.user_now >= max_client){
+                            share = '';
+                        }
+                    }
+                    html += `<td>${value.user_now} / ${max_client}</td>`;
+                    html += `<td>
+                                <a class="btn btn-primary" href='room.html?token=${token}?r=${btoa(value.id)}' role="button"><i class="fas fa-sign-in-alt"></i></a>
+                                ${share}
+                                <a class="btn btn-danger" href='javascript:removeRoom(${value.id})' role="button"><i class="fas fa-trash"></i></a>
+                            </td>`;
+                    html += '</tr>';
+                    number++;
+                })
+                html += '</tbody>';
+
+                $('#listRooms').html(html);
+                $('#listRooms').show();
+                $('#listRoomsMessage').html('');
+                $('#listRoomsMessage').hide();
+            }else {
+                $('#listRooms').hide();
+                $('#listRoomsMessage').show();
+                $('#listRoomsMessage').html(`<div class="f-btn-add-new-room" onclick="showmModalAddRoom()"><i style="font-size:27px;color:#999;" class="fas fa-plus"></i> <br> add new room</div>`);
+            }
+        });
+    }
+
+    function showmModalMessages() {
+        // $('#newRoomTitle').html('');
+        $('#modalMessages').modal('show');
+        messagesList();
+    }
+
+    function messagesList() {
+        var settings = {
+            "url": url+"/messagesList",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "token": localStorage.getItem("token")
+            },
+        };
+
+        $.ajax(settings).done(function (response) {
+            if(response.error){
+                let html = `<table class="table" id="listRooms">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">from</th>
+                            <th scope="col">title</th>
+                            <th scope="col">status</th>
+                            <!--<th scope="col"></th>-->
+                        </tr>
+                        </thead>
+                        <tbody>`;
+                let number = 1;
+                $.each(response.data, function (key, value) {
+                    html += '<tr>';
+                    html += `<th scope="row">${number}</th>`;
+                    html += `<td>${value.form_user_id}</td>`;
+                    html += `<td>${value.title}</td>`;
+                    html += `<td>${value.status}</td>`;
+                    /*html += `<td>
+                                <a class="btn btn-primary" href='room.html?token=${token}?r=${btoa(value.id)}' role="button"><i class="fas fa-sign-in-alt"></i></a>
+                            </td>`;*/
+                    html += '</tr>';
+                    number++;
+                })
+
+                html += `</tbody>
+                    </table>`;
+                $('#messagesList').html(html);
+            }else{
+                alert(response.message);
+            }
+        });
+    }
+
+    let shareRoomId='';
+    function showmModalShareRoom(id) {
+        $('#modalShareRoom').modal('show');
+        shareRoomId = id;
+    }
+
+    function shareRoom() {
+        let data = {"mobile":$('#shareRoomToMobile').val(),"room":shareRoomId};
+        var settings = {
+            "url": url+"/shareRoom",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "token": localStorage.getItem("token"),
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify(data),
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+            if(response.error){
+                shareRoomId = '';
+                $('#modalShareRoom').modal('hide');
+            }else{
+                alert(response.message)
+            }
+        });
+    }
+
+    function removeRoom(id) {
+        var settings = {
+            "url": url+"/deletedRoom",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "token": localStorage.getItem("token"),
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify({"room":id}),
+        };
+
+        $.ajax(settings).done(function (response) {
+            if(response.error){
+                getListRooms();
+                alert(response.message)
+            }else{
+                alert(response.message)
+            }
+        });
+    }
+
+    function getUser() {
+        var o = atob(localStorage.getItem("token"));
+        return {userId:o.split("@")[0],userMobile:o.split("@")[1],tokenTimestampGenerate:o.split("@")[2]};
+    }
+</script>
